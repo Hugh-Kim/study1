@@ -5,8 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 </head>
 <body>
-Test JSP!!!!
+<input id="intoChatRoom" type="button" value="입장">
+<script type="text/javascript" >
+    $("#intoChatRoom").click(function() {
+        alert("click!");
+    });
+</script>
 </body>
 </html>
