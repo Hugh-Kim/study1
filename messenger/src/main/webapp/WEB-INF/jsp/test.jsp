@@ -9,9 +9,32 @@
 </head>
 <body>
 <input id="intoChatRoom" type="button" value="입장">
+<div id="chatWindow" style="display: none;">
+    <div id="comunicateWindow" >
+        <textarea rows="50" cols="100" id="chatArea"></textarea>
+    </div>
+    <div id="writeWindow">
+        <textarea rows="5" cols="100" id="writeArea"></textarea>
+        <input id="send" type="button" value="보내기">
+    </div>
+</div>
 <script type="text/javascript" >
-    $("#intoChatRoom").click(function() {
-        alert("click!");
+    jQuery("#intoChatRoom").click(function() {
+        jQuery("#chatWindow").show();
+    });
+
+    jQuery("#send").click(function() {
+       jQuery.ajax({
+           type : 'POST',
+           url : '/say',
+           data : {message : jQuery("#writeArea").val()},
+           success : function(data) {
+               console.log("success!");
+           },
+           error : function() {
+               alert("comunicate fail.");
+           }
+       });
     });
 </script>
 </body>
