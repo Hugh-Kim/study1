@@ -20,7 +20,6 @@ public class ChatServerVerticle extends DefaultEmbeddableVerticle {
 
 	@Override
 	public void start(Vertx vertx) {
-		System.out.println("start vertx server!");
 		HttpServer httpServer = vertx.createHttpServer();
 		io = new DefaultSocketIOServer(vertx, httpServer);
 		io.sockets().onConnection(new Handler<SocketIOSocket>() {
@@ -31,6 +30,7 @@ public class ChatServerVerticle extends DefaultEmbeddableVerticle {
 				socket.on("echo", new Handler<JsonObject>() {
 					@Override
 					public void handle(JsonObject msg) {
+                        socket.broadcast().emit("echo", msg);
 						socket.emit("echo", msg);
 					}
 				});

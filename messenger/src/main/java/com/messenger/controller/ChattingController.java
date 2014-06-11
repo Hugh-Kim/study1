@@ -32,8 +32,11 @@ public class ChattingController {
 
     @RequestMapping("/send")
     @ResponseBody
-    public String send() {
-        chatServerVerticle.getIo().sockets().emit("echo", new JsonObject().putString("data", "hello Spring!"));
+    public String send(@RequestParam final String userName, @RequestParam final String message) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.putString("userName", userName);
+        jsonObject.putString("message", message);
+        chatServerVerticle.getIo().sockets().emit("chatMessage", jsonObject);
         return "ok";
     }
 }
