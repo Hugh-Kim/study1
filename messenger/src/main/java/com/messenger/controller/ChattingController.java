@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.vertx.java.core.json.JsonObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /**
  *
  * Created by Administrator on 2014-06-02.
@@ -23,9 +26,9 @@ public class ChattingController {
     }
 
     @RequestMapping("/intoChatRoom")
-    public ModelAndView intoChatRoom(@RequestParam String userName){
+    public ModelAndView intoChatRoom(@RequestParam String userName) throws UnsupportedEncodingException {
         ModelAndView modelAndView = new ModelAndView("/chatRoom");
-        modelAndView.addObject("userName", userName);
+        modelAndView.addObject("userName", URLDecoder.decode(userName, "UTF-8"));
         modelAndView.addObject("port", 1234);
         return modelAndView;
     }
