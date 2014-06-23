@@ -14,13 +14,19 @@
 <body>
 <form id="userInfo" method="post" action="/intoChatRoom">
     <input type="text" id="userName" name="userName">
-    <input type="button" id="intoChatRoom" value="입장">
+    <input type="submit" id="intoChatRoom" value="입장">
 </form>
 <script src="/js/jquery-2.1.1.min.js"></script>
 <script src="/js/socket.io.js"></script>
 <script type="text/javascript">
-    jQuery("#intoChatRoom").click(function() {
-        jQuery("#userInfo").submit();
+    jQuery("#userInfo").submit(function(e) {
+        console.dir(e);
+        if (jQuery("#userName").val() == '') {
+            alert("이름 넣어주세요.");
+            e.preventDefault();
+            return;
+        }
+        jQuery("#userName").val(encodeURIComponent(jQuery("#userName").val()));
     });
 </script>
 </body>
