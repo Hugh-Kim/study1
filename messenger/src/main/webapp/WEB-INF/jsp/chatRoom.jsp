@@ -10,24 +10,33 @@
 <html>
 <head>
     <title>Socket.IO chat</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font: 13px Helvetica, Arial; }
-        #wirteSection { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-        #wirteSection input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-        #wirteSection button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-        #messages { list-style-type: none; margin: 0; padding: 0; }
-        #messages li { padding: 5px 10px; }
-        #messages li:nth-child(odd) { background: #eee; }
-    </style>
 </head>
 <body>
-<ul id="messages"></ul>
-<form id="wirteSection">
-    <input id="writeMessage" autocomplete="off" /><button id="sendBtn" >Send</button>
-</form>
+<div id="container">
+    <div class="col-lg-3" id="chatWindow">
+        <div>
+            <ul id="messages"></ul>
+        </div>
+        <form class="input-group" style="position: fixed; width: inherit;bottom: 0;">
+            <input type="text" class="form-control" id="writeMessage">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="sendBtn" type="submit">Send</button>
+                </span>
+
+        </form>
+    </div>
+    <div class="col-lg-9" style="background-color: slategrey">
+        <h2>소스코드 편집창</h2>
+
+    </div>
+</div>
+
 <script src="/js/jquery-2.1.1.min.js"></script>
 <script src="/js/socket.io.js"></script>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/css/bootstrap.min.css">
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-wip/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     jQuery(function() {
         var socket = io.connect("http://localhost:" + "${port}");

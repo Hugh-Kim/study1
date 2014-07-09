@@ -5,7 +5,13 @@ package com.messenger.model;
  */
 public class Client {
     private String clientId;
+    private int chatRoomPort;
     private Message message;
+
+    public Client(String userName, int chatRoomPort) {
+        this.clientId = userName;
+        this.chatRoomPort = chatRoomPort;
+    }
 
     public String getClientId() {
         return clientId;
@@ -13,6 +19,14 @@ public class Client {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public int getChatRoomPort() {
+        return chatRoomPort;
+    }
+
+    public void setChatRoomPort(int chatRoomPort) {
+        this.chatRoomPort = chatRoomPort;
     }
 
     public Message getMessage() {
