@@ -44,7 +44,6 @@ public class ChattingController {
 	@RequestMapping("/send")
 	@ResponseBody
 	public String send(@RequestParam final String userName, @RequestParam final String message) {
-        System.out.println("message >> " + message);
         JsonObject jsonObject = new JsonObject();
 		jsonObject.putString("userName", userName);
 		jsonObject.putString("message", message);

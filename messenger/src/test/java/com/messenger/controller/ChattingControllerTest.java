@@ -1,65 +1,59 @@
 package com.messenger.controller;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.ModelAndViewAssert;
-import org.springframework.web.servlet.HandlerAdapter;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:dispatcher-servlet.xml")
+@WebAppConfiguration
 public class ChattingControllerTest {
 
-    private MockHttpServletRequest mockHttpServletRequest;
-    private MockHttpServletResponse mockHttpServletResponse;
-    private HandlerAdapter handlerAdapter;
-    private ChattingController chattingController;
-
     @Autowired
-    private ApplicationContext context;
+    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
+
+    public static final String TEST_USER_NAME = "Hugh";
 
     @Before
-    public void setUp() throws Exception {
-        mockHttpServletRequest = new MockHttpServletRequest();
-        mockHttpServletResponse = new MockHttpServletResponse();
-        handlerAdapter = new AnnotationMethodHandlerAdapter();
-//        chattingController = new ChattingController();
-        chattingController = context.getBean(ChattingController.class);
+	public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+	}
+
+    @Test
+    public void testIndexMain() throws Exception {
+        mockMvc.perform(get("/index"))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("WEB-INF/jsp/index.jsp"));
     }
 
     @Test
     public void testMakeChatRoom() throws Exception {
-        mockHttpServletRequest.setRequestURI("/index");
-        final ModelAndView mav = handlerAdapter.handle(mockHttpServletRequest, mockHttpServletResponse, chattingController);
-        ModelAndViewAssert.assertViewName(mav, "index");
+        mockMvc.perform(get("/makeChatRoom").param("userName", TEST_USER_NAME))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("WEB-INF/jsp/chatRoom.jsp"))
+                .andExpect(model().attribute("userName", is(TEST_USER_NAME)))
+                .andExpect(model().attribute("port", is(1234)));
     }
 
     @Test
-    public void testIntoChatRoom() throws Exception {
-        mockHttpServletRequest.setRequestURI("/intoChatRoom");
-        mockHttpServletRequest.setParameter("userName", "testUser");
-        final ModelAndView mav = handlerAdapter.handle(mockHttpServletRequest, mockHttpServletResponse, chattingController);
-        ModelAndViewAssert.assertViewName(mav, "chatRoom");
-        ModelAndViewAssert.assertModelAttributeValue(mav, "userName", "testUser");
-        ModelAndViewAssert.assertModelAttributeValue(mav, "port", 1234);
-    }
+	public void testSend() throws Exception {
+        mockMvc.perform(post("/send").param("userName", TEST_USER_NAME).param("message", "This is test message."))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+                ;
 
-    @Test
-    public void testSend() throws Exception {
-        mockHttpServletRequest.setRequestURI("/send");
-        mockHttpServletRequest.setParameter("userName", "testUser");
-        mockHttpServletRequest.setParameter("message", "testMessage");
-        handlerAdapter.handle(mockHttpServletRequest, mockHttpServletResponse, chattingController);
-        Assert.assertThat(mockHttpServletResponse.getContentAsString(), Matchers.is("ok"));
-    }
+	}
 }
