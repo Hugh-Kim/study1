@@ -20,6 +20,12 @@
     <properties>
         <spring.version>4.0.5.RELEASE</spring.version>
     </properties>
+    <repositories>
+        <repository>
+            <id>keesun.mvn.repo</id>
+            <url>https://github.com/keesun/mvn-repo/raw/master</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -86,7 +92,7 @@
         <dependency>
             <groupId>com.nhncorp</groupId>
             <artifactId>mod-socket-io</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
